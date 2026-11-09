@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Undangan Pernikahan - Randy & Intan</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Hubungkan ke file CSS -->
+    <link rel="stylesheet" href="opening-style.css">
+</head>
+<body>
+
+   <div class="opening-cover">
+    <!-- Lapisan Hitam Transparan (Opasitas 0.45 agar foto tetap jelas) -->
+    <div class="cover-overlay"></div>
+
+    <div class="cover-content">
+        <!-- Teks The Wedding Of di paling atas -->
+        <span class="cover-subtitle">THE WEDDING OF</span>
+
+        <!-- Grup Tengah (Nama, Tamu, Kutipan, Tombol) -->
+        <div class="cover-center-group">
+            <!-- Nama Mempelai Dipisah -->
+            <div class="cover-names-container">
+                <h1 class="name-groom">Randy</h1>
+                <span class="name-divider">&amp;</span>
+                <h1 class="name-bride">Intan</h1>
+            </div>
+
+            <!-- Bagian Tamu -->
+            <div class="guest-section">
+                <p class="guest-label">KEPADA YTH. BAPAK/IBU/SAUDARA/I</p>
+                <h3 id="namaTamu">Tamu Undangan Spesial</h3>
+            </div>
+
+            <!-- Kutipan / Ayat -->
+            <p class="cover-quote">
+                "Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri..."
+            </p>
+
+            <!-- Tombol Buka Undangan -->
+           <!-- Tombol Buka Undangan -->
+            <button onclick="bukaUndangan()" class="btn-buka-undangan">
+                BUKA UNDANGAN
+            </button>
+        </div>
+
+        <div class="cover-bottom-space"></div>
+    </div>
+</div>
+<audio id="bgMusic" loop>
+        <source src="song.mp3" type="audio/mp3">
+    </audio>
+
+    <!-- Script untuk mengambil nama tamu dari URL (misal: opening.html?to=NamaTamu) -->
+    <script>
+        // Ambil nama tamu dari URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const toParam = urlParams.get('to');
+        if (toParam) {
+            document.getElementById('namaTamu').innerText = decodeURIComponent(toParam);
+        }
+
+        // Fungsi saat tombol BUKA UNDANGAN diklik
+        function bukaUndangan() {
+            const music = document.getElementById('bgMusic');
+            
+            // Coba putar musik
+            music.play().then(() => {
+                // Simpan status bahwa musik sedang aktif ke memory browser (localStorage)
+                localStorage.setItem('playMusic', 'true');
+            }).catch(err => {
+                console.log("Gagal memutar musik:", err);
+            }).finally(() => {
+                // Beri sedikit jeda (misal 0.3 detik) agar audio sempat ter-trigger, lalu pindah ke index.html
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 300);
+            });
+        }
+    </script>
+</body>
+</html>

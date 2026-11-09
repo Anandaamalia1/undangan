@@ -1,0 +1,208 @@
+/* =========================
+   STYLE HALAMAN OPENING / COVER (NAMA DIPISAH)
+========================= */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #410200;
+    overflow: hidden;
+}
+
+/* Bagian Sampul Full Screen dengan Background Foto */
+.opening-cover {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background: url('bg.jpeg') no-repeat center center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* Lapisan Hitam Transparan Tipis Agar Foto Terlihat Jelas */
+.cover-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1;
+}
+
+/* Konten di dalam Cover */
+.cover-content {
+    position: relative;
+    z-index: 2;
+    padding: 20px 20px 30px 20px;
+    width: 100%;
+    max-width: 420px;
+    height: 100vh;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Teks The Wedding Of di paling atas (Muncul Pertama - 0.3 detik) */
+.cover-subtitle {
+    font-size: 10px;
+    letter-spacing: 3.5px;
+    color: #fff0cf;
+    text-transform: uppercase;
+    margin-top: 25px;
+    margin-bottom: 0;
+    position: relative;
+    display: inline-block;
+    opacity: 0;
+    animation: fadeSlideUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+}
+
+.cover-subtitle::before,
+.cover-subtitle::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 25px;
+    height: 1px;
+    background: #D4AF37;
+}
+
+.cover-subtitle::before {
+    right: 105%;
+}
+
+.cover-subtitle::after {
+    left: 105%;
+}
+
+/* Grup Tengah */
+.cover-center-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px; 
+    margin: auto 0;
+    width: 100%;
+}
+
+/* Kontainer Nama Mempelai yang Dipisah */
+.cover-names-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    opacity: 0;
+    animation: fadeSlideUp 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+    margin-bottom: 15px;
+}
+
+.name-groom, .name-bride {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2.7rem;
+    color: #fff0cf;
+    margin: 0;
+    font-weight: normal;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    line-height: 1.1;
+}
+
+.name-divider {
+    font-family: 'Great Vibes', cursive;
+    font-size: 1.8rem;
+    color: #fff0cf;
+    margin: -5px 0;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+/* Bagian Kepada Tamu (Muncul Ketiga - 0.9 detik) */
+.guest-section {
+    width: 100%;
+    margin-top: 5px;
+    opacity: 0;
+    animation: fadeSlideUp 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.9s forwards;
+}
+
+.guest-label {
+    font-size: 9.5px;
+    letter-spacing: 2px;
+    color: #d8c2b5;
+    margin-bottom: 4px;
+}
+
+/* Nama Tamu Versi Teks Besar Tanpa Box */
+#namaTamu {
+    font-size: 1.3rem;
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    color: #fff0cf;
+    margin: 0;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+/* Kutipan / Ayat (Muncul Keempat - 1.2 detik) */
+.cover-quote {
+    font-size: 10px;
+    color: #e2d3c1;
+    font-style: italic;
+    line-height: 1.4;
+    max-width: 300px;
+    margin: 5px 0 0 0;
+    opacity: 0;
+    animation: fadeSlideUp 1.4s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
+}
+
+/* Tombol Buka Undangan (Muncul Terakhir - 1.5 detik) */
+.btn-buka-undangan {
+    background: #fff0cf;
+    color: #410200;
+    padding: 10px 24px;
+    border-radius: 999px;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    border: 1px solid #D4AF37;
+    margin-top: 10px;
+    opacity: 0;
+    animation: fadeSlideUp 1.4s cubic-bezier(0.16, 1, 0.3, 1) 1.5s forwards;
+}
+
+.btn-buka-undangan:hover {
+    background: #D4AF37;
+    transform: translateY(-2px);
+    box-shadow: 0 7px 20px rgba(212, 175, 55, 0.4);
+}
+
+.cover-bottom-space {
+    height: 10px;
+}
+
+/* =========================
+   DEFINISI ANIMASI PERLAHAN (FADE & SLIDE UP)
+========================= */
+@keyframes fadeSlideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+        filter: blur(4px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
