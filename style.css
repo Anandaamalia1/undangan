@@ -2419,9 +2419,19 @@ h2, .mempelai-name {
 /* ==========================================================================
    PENGATURAN RESPONSIF: TABLET & SEMUA JENIS IPAD (Maksimal Lebar 1366px)
    ========================================================================== */
-@media screen and (min-width: 480px) and (max-width: 765px){
+@media screen and (min-width: 786px) and (max-width: 1366px){
     section {
-        padding: 100px 50px !important;
+        padding: 40px 15px !important;
+        min-height: auto !important; /* Hapus min-height 100vh yang kaku */
+        height: auto !important;     /* Biarkan mengalir secara natural */
+        box-sizing: border-box !important;
+        overflow: visible !important; /* Mencegah konten/scroll terkunci */
+    }
+
+    /* Kecuali untuk halaman depan (opening) jika ingin tetap pas satu layar penuh */
+    .opening-section {
+        height: 100vh !important;
+        min-height: 100vh !important;
     }
 
     .container {
@@ -4226,8 +4236,13 @@ h2, .mempelai-name {
 /* 2. KHUSUS HP KECIL (Maksimal Lebar 480px) */
 @media screen and (min-width: 480px) and (max-width: 765px) {
     section {
-        padding: 50px 16px;
+        padding: 40px 16px !important;
+        min-height: auto !important;
+        height: auto !important;
+        box-sizing: border-box !important;
+        overflow: visible !important;
     }
+
     .opening-section {
         height: 100vh !important;
         min-height: 100vh !important;
@@ -4293,7 +4308,7 @@ h2, .mempelai-name {
     .section-description-lokasi,
     .section-description-amplop,
     .section-description-galeri {
-        font-size: 9px !important;       /* <-- Ubah ukuran font deskripsi untuk semua section di sini */
+        font-size: 9px !important;        /* <-- Ubah ukuran font deskripsi untuk semua section di sini */
         line-height: 1.5 !important;
         margin-bottom: 20px !important;
         max-width: 88% !important;
@@ -4304,7 +4319,7 @@ h2, .mempelai-name {
 
     /* --- KONTROL KONTEN BOX KHUSUS HP (Agar tidak memanjang/lonjong) --- */
     .doa-content-box {
-        width: 100% !important;           /* Lebar box mengikuti layar HP */
+        width: 100% !important;            /* Lebar box mengikuti layar HP */
         max-width: 350px !important;    /* Batas maksimal agar tidak terlalu lebar */
         padding: 60px 20px !important;  /* Padding atas-bawah & kiri-kanan dibuat pas agar tidak memanjang */
         margin: 0 auto !important;
@@ -4339,27 +4354,27 @@ h2, .mempelai-name {
     }
     .section-badge-doa {
         margin-top: 30px;
-
     }
 
     .ornament-full-border {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important; 
-    pointer-events: none !important; 
-    z-index: 6 !important;         
-    opacity: 0;
-    transition: opacity 1.8s ease-in-out;
-}
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important; 
+        pointer-events: none !important; 
+        z-index: 6 !important;         
+        opacity: 0;
+        transition: opacity 1.8s ease-in-out;
+    }
 
     .acara-section {
-        min-height: 100vh !important;
+        min-height: auto !important;
+        height: auto !important;
         display: flex !important;
         flex-direction: column !important;
-        justify-content: center !important;
+        justify-content: flex-start !important;
         align-items: center !important;
         padding: 40px 12px !important;
         box-sizing: border-box !important;
@@ -4382,7 +4397,6 @@ h2, .mempelai-name {
 
     /* Ukuran Card & Pengaturan Variabel Ukuran Teks Terpisah */
     .acara-card {
-        /* --- UBAH UKURAN TEKS DI HP DI SINI --- */
         --font-title-hp: 0.9rem;     /* 1. Ukuran Judul (Akad Nikah / Resepsi) */
         --font-info-hp: 9px;         /* 2. Ukuran Tanggal, Jam, & Tempat */
         --font-alamat-hp: 8px;       /* 3. Ukuran teks Alamat detail */
@@ -4420,7 +4434,8 @@ h2, .mempelai-name {
     }
 
     .countdown-section {
-        min-height: 100vh !important;
+        min-height: auto !important;
+        height: auto !important;
         padding: 50px 15px !important;
     }
 
@@ -4472,14 +4487,14 @@ h2, .mempelai-name {
     }
 
     /* RANTAI DI HP (SUDAH DIPERBAIKI & DITAMBAHKAN KONTROL OPASITAS) */
-  .vintage-chain-top-left { width: 120px !important; left: -10px !important; opacity: 0.6 !important; } /* <-- Ubah ukuran rantai di HP jika mau */
+    .vintage-chain-top-left { width: 120px !important; left: -10px !important; opacity: 0.6 !important; }
     .pearls-top-right { 
         width: 450px !important; 
         height: 120px !important;
         margin-top: 30px;
         margin-right:-200px;
         opacity: 0.5 !important;
-    }      /* <-- Ubah ukuran mutiara di HP */
+    }     
     
     /* Ukuran bunga bertumpuk di HP */
     .flower-1 { width: 90px !important; left: -30px !important; bottom: 6px !important; margin-top:40px;  opacity: 0.9 !important;}
@@ -4491,12 +4506,15 @@ h2, .mempelai-name {
     .floral-group-bottom-right .flower-2 { right: 0px !important; bottom: 10px !important; opacity: 0.9 !important;}
     .floral-group-bottom-right .flower-3 { right: 50px !important; bottom: 6px !important; margin-top:30px;  opacity: 0.9 !important;}
     .floral-group-bottom-right .flower-4 { right: -5px !important; bottom: 9px !important; margin-bottom:-50px; opacity: 0.9 !important;}
-}
 
-
-.galeri-section {
-        min-height: 100vh !important;
+    .galeri-section {
+        min-height: auto !important;
+        height: auto !important;
         padding: 25px 12px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        align-items: center !important;
     }
 
     .galeri-section h2 {
@@ -4511,7 +4529,7 @@ h2, .mempelai-name {
         --ipod-lebar-hp: 190px;        
         --ipod-geser-kiri-hp: -43px;
         
-        --vinyl-lebar-hp: 220px;       
+        --vinyl-lebar-hp: 220px;        
         --vinyl-tinggi-hp: 220px;      
         --vinyl-geser-kanan-hp: -58px; 
         --vinyl-geser-atas-hp: 40px;      
@@ -4531,10 +4549,10 @@ h2, .mempelai-name {
         top: var(--vinyl-geser-atas-hp) !important;
     }
 
-    /* === POSISI TOMBOL DI BAWAH LAYAR FOTO (DIATUR DENGAN 'TOP') === */
+    /* === POSISI TOMBOL DI BAWAH LAYAR FOTO === */
     .ipod-music-container .ipod-controls-overlay {
         position: absolute !important;
-        top: 200px !important; /* <-- ATUR ANGKA INI: Kecilkan untuk menaikkan, besarkan untuk menurunkan */
+        top: 200px !important; 
         left: 50% !important;
         transform: translateX(-50%) !important;
         display: flex !important;
@@ -4562,9 +4580,9 @@ h2, .mempelai-name {
 
     /* Ukuran layar foto */
     .ipod-screen-overlay {
-        top: 9px !important;       
-        left: 11px !important;     
-        right: 10px !important;    
+        top: 9px !important;        
+        left: 11px !important;      
+        right: 10px !important;     
         bottom: auto !important;
         height: 136px !important;  
         border-radius: 4px !important;
@@ -4582,8 +4600,8 @@ h2, .mempelai-name {
     }
 
     .btn-toggle-galeri {
-        --btn-width-hp: 200px;           
-        --btn-font-hp: 7.8px;               
+        --btn-width-hp: 200px;            
+        --btn-font-hp: 7.8px;                
         --btn-padding-hp: 8px 16px;      
 
         width: 100% !important;
@@ -4592,11 +4610,13 @@ h2, .mempelai-name {
         padding: var(--btn-padding-hp) !important;
         margin: 0 auto !important;
     }
+
     .lokasi-section {
-        min-height: 100vh !important;
+        min-height: auto !important;
+        height: auto !important;
         display: flex !important;
         flex-direction: column !important;
-        justify-content: center !important;
+        justify-content: flex-start !important;
         align-items: center !important;
         padding: 0px 20px !important;
         box-sizing: border-box !important;
@@ -4607,62 +4627,61 @@ h2, .mempelai-name {
         margin-bottom: 6px !important;
     }
 
-    /* Kotak Peta/Kertas di HP (Dibuat pas, tidak terlalu panjang/lonjong) */
+    /* Kotak Peta/Kertas di HP */
     .map-preview-box {
         width: 100% !important;
         max-width: 300px !important;
-        padding: 70px 20px !important; /* Padding disesuaikan agar pas di HP */
+        padding: 70px 20px !important; 
         margin: 0 auto 15px auto !important;
         background-size: 100% 100% !important;
     }
 
-    /* Peta Iframe di HP */
     .map-preview-box iframe {
         width: 170px !important;
-        height: 170px !important;      /* Tinggi peta disesuaikan agar pas di layar kecil */
+        height: 170px !important;      
         margin-left: 15px !important;
         margin-top: -15px !important;
         margin-bottom: 10px !important;
         border-radius: 8px !important;
     }
 
-    /* Teks Nama Tempat & Alamat di dalam Kotak HP */
     .lokasi-nama-tempat {
         font-size: 0.95rem !important;
         margin-bottom: 4px !important;
     }
 
     .lokasi-alamat-teks {
-        font-size: 8.5px !important;   /* Ukuran teks alamat rapi dan pas dibaca */
+        font-size: 8.5px !important;   
         max-width: 100% !important;
         margin-left: 0 !important;
         line-height: 1.4 !important;
         margin-top:100px;
     }
 
-    /* Tombol Google Maps di HP (Teks Dipastikan di Tengah) */
-.btn-maps {
-    --btn-width-hp: 190px;
-    --btn-font-hp: 9px;
-    --btn-padding-hp: 8px 16px;
+    .btn-maps {
+        --btn-width-hp: 190px;
+        --btn-font-hp: 9px;
+        --btn-padding-hp: 8px 16px;
 
-    display: flex !important;           /* Mengaktifkan flexbox */
-    justify-content: center !important; /* Menengahkan teks secara horizontal */
-    align-items: center !important;     /* Menengahkan teks secara vertikal */
-    text-align: center !important;      /* Cadangan rata tengah teks */
-    box-sizing: border-box !important;
+        display: flex !important;            
+        justify-content: center !important; 
+        align-items: center !important;     
+        text-align: center !important;      
+        box-sizing: border-box !important;
 
-    width: 100% !important;
-    max-width: var(--btn-width-hp) !important;
-    font-size: var(--btn-font-hp) !important;
-    padding: var(--btn-padding-hp) !important;
-    margin: 0 auto !important;
-}
-.amplop-section {
-        min-height: 100vh !important;
+        width: 100% !important;
+        max-width: var(--btn-width-hp) !important;
+        font-size: var(--btn-font-hp) !important;
+        padding: var(--btn-padding-hp) !important;
+        margin: 0 auto !important;
+    }
+
+    .amplop-section {
+        min-height: auto !important;
+        height: auto !important;
         display: flex !important;
         flex-direction: column !important;
-        justify-content: center !important;
+        justify-content: flex-start !important;
         align-items: center !important;
         padding: 40px 15px !important;
         box-sizing: border-box !important;
@@ -4672,7 +4691,7 @@ h2, .mempelai-name {
         font-size: 1.7rem !important;
         margin-bottom: 6px !important;
     }
-    /* Ukuran Kartu ATM di HP */
+
     .atm-card {
         width: 92% !important;
         max-width: 320px !important;
@@ -4712,7 +4731,6 @@ h2, .mempelai-name {
         font-size: 7.5px !important;
     }
 
-    /* Ukuran Dropdown E-Wallet & Kado di HP */
     .ewallet-dropdown-box,
     .gift-dropdown-box {
         width: 92% !important;
@@ -4741,18 +4759,19 @@ h2, .mempelai-name {
         font-size: 8px !important;
     }
 
-    /* Teks Alamat Kado di dalam Dropdown HP */
     .address-detail p {
         font-size: 10.5px !important;
     }
-/* ==========================================================================
-       RSVP SECTION KHUSUS HP (FINAL & DIPERBAIKI)
+
+    /* ==========================================================================
+       RSVP SECTION KHUSUS HP (DIJAMIN TIDAK ZOOM & TIDAK MEMBAL)
        ========================================================================== */
     .rsvp-section {
-        min-height: 100vh !important;
+        min-height: auto !important;
+        height: auto !important;
         display: flex !important;
         flex-direction: column !important;
-        justify-content: center !important;
+        justify-content: flex-start !important;
         align-items: center !important;
         padding: 40px 15px !important;
         box-sizing: border-box !important;
@@ -4763,7 +4782,6 @@ h2, .mempelai-name {
         margin-bottom: 6px !important;
     }
 
-    /* Lebar Form di HP */
     .rsvp-section form {
         width: 92% !important;
         max-width: 290px !important;
@@ -4773,41 +4791,42 @@ h2, .mempelai-name {
         margin-bottom: 12px !important;
     }
 
-    /* Ukuran Input, Select, & Textarea di HP */
+    /* Mencegah Safari Auto-Zoom dengan Font 16px tapi diskala kecil agar tetap pas */
     .form-group input,
     .form-group select {
-        padding: 8px 16px !important;
-        font-size: 9px !important;
+        padding: 10px 14px !important;
+        font-size: 16px !important; 
+        transform: scale(0.6) !important;
+        transform-origin: left center !important;
+        width: 166% !important;
+        box-sizing: border-box !important;
     }
 
     .form-group textarea {
-        padding: 10px 16px !important;
-        font-size: 9px !important;
+        padding: 10px 14px !important;
+        font-size: 16px !important; 
+        transform: scale(0.6) !important;
+        transform-origin: left top !important;
+        width: 166% !important;
         min-height: 70px !important;
+        box-sizing: border-box !important;
     }
 
-    /* Pengaturan Kustom Select RSVP (Panah ke dalam dengan SVG) */
     .rsvp-section select {
         -webkit-appearance: none !important;
         -moz-appearance: none !important;
         appearance: none !important;
-        
-        padding-right: 40px !important; /* Ruang agar teks tidak menabrak panah */
-        
-        /* Ikon panah SVG buatan sendiri agar posisinya bisa diatur persis */
+        padding-right: 40px !important;
         background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23410200' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>") !important;
         background-repeat: no-repeat !important;
-        background-position: right 18px center !important; /* <-- Ubah angka '18px' ini untuk menggeser panah ke dalam/keluar */
-        
+        background-position: right 18px center !important;
         text-overflow: ellipsis;
     }
 
-    /* Tombol RSVP di HP (Bisa Dipendekkan / Diatur Ukurannya) */
     .btn-rsvp {
-        /* --- ATUR UKURAN DI SINI --- */
-        --btn-width-hp: 120px;       /* <-- Lebar tombol */
-        --btn-height-hp: 38px;       /* <-- Ubah angka ini jadi lebih kecil (misal: 30px atau 32px) untuk memendekkan */
-        --btn-font-hp: 8px;         /* <-- Ukuran teks */
+        --btn-width-hp: 120px;       
+        --btn-height-hp: 38px;       
+        --btn-font-hp: 8px;          
 
         display: flex !important;
         justify-content: center !important;  
@@ -4818,7 +4837,6 @@ h2, .mempelai-name {
         width: 100% !important;
         max-width: var(--btn-width-hp) !important;
         
-        /* Memaksa tinggi tombol agar mengikuti keinginan kita */
         height: var(--btn-height-hp) !important;
         min-height: unset !important;
         max-height: var(--btn-height-hp) !important;
@@ -4827,11 +4845,13 @@ h2, .mempelai-name {
         font-size: var(--btn-font-hp) !important;
         margin: 10px auto !important;
     }
+
     .ucapan-section {
-        min-height: 100vh !important;
+        min-height: auto !important;
+        height: auto !important;
         display: flex !important;
         flex-direction: column !important;
-        justify-content: center !important;
+        justify-content: flex-start !important;
         align-items: center !important;
         padding: 40px 15px !important;
         box-sizing: border-box !important;
@@ -4842,26 +4862,23 @@ h2, .mempelai-name {
         margin-bottom: 6px !important;
     }
 
-    /* Area list komentar di HP */
     .comment-header {
         margin-bottom: 1px !important;
     }
 
-
-    /* Badge Hadir / Tidak Hadir di HP */
     .comment-status {
         font-size: 7.5px !important;
         padding: 1px 6px !important;
     }
+
     .message-list {
         background: transparent !important;
         border: none !important;
         box-shadow: none !important;
     }
 
-    /* Bubble komentar solid di HP (rapat & ukuran ringkas) */
     .comment {
-        background: #FFF1cf !important; /* Warna cream solid asal */
+        background: #FFF1cf !important; 
         padding: 7px 10px !important;
         margin-bottom: 8px !important;
         border-radius: 10px !important;
@@ -4895,17 +4912,19 @@ h2, .mempelai-name {
     }
 
     .terima-kasih-section {
-        min-height: 100vh !important;
+        min-height: auto !important;
+        height: auto !important;
         display: flex !important;
         flex-direction: column !important;
-        justify-content: center !important;
+        justify-content: flex-start !important;
         align-items: center !important;
         text-align: center !important;
         padding: 40px 15px !important;
         box-sizing: border-box !important;
     }
+
     .thank-you-description{
-        font-size: 11px !important;       /* <-- Ubah ukuran font deskripsi untuk semua section di sini */
+        font-size: 11px !important;       
         line-height: 1.5 !important;
         margin-bottom: 20px !important;
         max-width: 88% !important;
@@ -4920,7 +4939,6 @@ h2, .mempelai-name {
         margin: 0 auto !important;
     }
 
-    /* Ukuran Kotak Ikon Hati di HP */
     .thank-you-icon-box {
         width: 38px !important;
         height: 38px !important;
@@ -4930,13 +4948,15 @@ h2, .mempelai-name {
     .heart-icon {
         font-size: 14px !important;
     }
+
     .thank-you-badge {
         font-size: 9px !important;
         letter-spacing: 2px !important;
         margin-bottom: 5px !important;
     }
+
     .thank-you-couple-names {
-        font-size: 1.85rem !important; /* Dikecilkan sedikit agar pas dan tidak terpotong di layar kecil */
+        font-size: 1.85rem !important; 
         margin-bottom: 15px !important;
         line-height: 1.2 !important;
     }
