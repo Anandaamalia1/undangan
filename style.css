@@ -2419,7 +2419,7 @@ h2, .mempelai-name {
 /* ==========================================================================
    PENGATURAN RESPONSIF: TABLET & SEMUA JENIS IPAD (Maksimal Lebar 1366px)
    ========================================================================== */
-@media screen and (max-width: 1366px) {
+@media screen and (min-width: 480px) and (max-width: 765px){
     section {
         padding: 100px 50px !important;
     }
@@ -4224,7 +4224,7 @@ h2, .mempelai-name {
 }
 
 /* 2. KHUSUS HP KECIL (Maksimal Lebar 480px) */
-@media screen and (max-width: 480px) {
+@media screen and (min-width: 480px) and (max-width: 765px) {
     section {
         padding: 50px 16px;
     }
