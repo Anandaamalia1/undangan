@@ -268,17 +268,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const vinyl = document.getElementById('vinylRecord');
     const playPauseIcon = document.getElementById('playPauseIcon');
 
-    // Pastikan mengambil izin dari localStorage
+    // Begitu masuk index.html, langsung putar musik secara otomatis jika izin ada
     if (music && localStorage.getItem('playMusic') === 'true') {
         music.play().then(() => {
             if (vinyl) vinyl.classList.add('playing');
             if (playPauseIcon) playPauseIcon.innerHTML = '&#10074;&#10074;';
         }).catch(err => {
-            console.log("Audio dicegah oleh browser HP:", err);
+            console.log("Autoplay dicegah oleh browser:", err);
         });
     }
 });
-
 function toggleMusic() {
     const music = document.getElementById('bgMusic');
     const vinyl = document.getElementById('vinylRecord');
