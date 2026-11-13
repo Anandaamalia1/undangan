@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-// KONFIGURASI FIREBASE KAKAK (Silakan ganti sesuai dengan project Firebase Kakak)
+// KONFIGURASI FIREBASE KAKAK
 const firebaseConfig = {
     apiKey: "AIzaSyALM_MZ_5_1F4nBG-DnzidVD00tVG4XTMs",
     authDomain: "udangan.firebaseapp.com",
@@ -60,7 +60,6 @@ const commentsRef = ref(db, 'ucapan_tamu');
 const form = document.getElementById("rsvpForm");
 const messageList = document.getElementById("messageList");
 
-// Kosongkan list statis awal agar terisi penuh secara real-time dari database
 if (messageList) {
     messageList.innerHTML = "";
     
@@ -68,7 +67,7 @@ if (messageList) {
     onChildAdded(commentsRef, (snapshot) => {
         const item = snapshot.val();
         
-        // Hapus teks "Belum ada ucapan" jika sudah ada data masuk
+        // Hapus teks placeholder jika masih ada
         const emptyText = messageList.querySelector("p");
         if (emptyText) emptyText.remove();
 
@@ -103,7 +102,6 @@ if (form) {
             return;
         }
 
-        // Format waktu lokal Indonesia
         const now = new Date();
         const timestamp = now.toLocaleDateString("id-ID") + ', ' + now.toLocaleTimeString("id-ID", { hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(/\./g, ':');
 
@@ -114,7 +112,7 @@ if (form) {
             waktu: timestamp
         };
 
-        // Kirim data ke Firebase Database (Otomatis menyebar real-time ke semua perangkat)
+        // Kirim data ke Firebase Database secara real-time
         push(commentsRef, data).then(() => {
             form.reset();
 
@@ -125,12 +123,12 @@ if (form) {
             }
         }).catch((error) => {
             console.error("Gagal mengirim ucapan:", error);
-            alert("Gagal mengirim ucapan. Periksa koneksi atau konfigurasi database.");
+            alert("Gagal mengirim ucapan. Periksa koneksi internet.");
         });
     });
 }
 
-// Fungsi keamanan untuk mencegah celah injeksi HTML/XSS dari input teks
+// Fungsi keamanan untuk mencegah celah injeksi HTML/XSS
 function escapeHtml(text) {
     if (!text) return "";
     const map = {
@@ -171,7 +169,7 @@ window.addToCalendar = function() {
     const isIOS = /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent) && !window.MSStream;
 
     if (isIOS) {
-        const icsContent = 
+        const iconContent = 
             "BEGIN:VCALENDAR\n" +
             "VERSION:2.0\n" +
             "BEGIN:VEVENT\n" +
@@ -183,7 +181,7 @@ window.addToCalendar = function() {
             "END:VEVENT\n" +
             "END:VCALENDAR";
 
-        const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+        const blob = new Blob([iconContent], { type: 'text/calendar;charset=utf-8' });
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
         link.setAttribute('download', 'pernikahan.ics');
