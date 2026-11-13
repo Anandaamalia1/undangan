@@ -1,6 +1,6 @@
-/* =========================
-   STYLE HALAMAN OPENING / COVER (NAMA DIPISAH)
-========================= */
+/* ==========================================================================
+   STYLE HALAMAN OPENING / COVER - FINAL SEIMBANG (HP, IPAD, LAPTOP)
+   ========================================================================== */
 body, html {
     margin: 0;
     padding: 0;
@@ -24,7 +24,7 @@ body, html {
     box-sizing: border-box;
 }
 
-/* Lapisan Hitam Transparan Tipis Agar Foto Terlihat Jelas */
+/* Lapisan Hitam Transparan Tipis */
 .cover-overlay {
     position: absolute;
     top: 0;
@@ -35,7 +35,7 @@ body, html {
     z-index: 1;
 }
 
-/* Konten di dalam Cover */
+/* Konten di dalam Cover (Default HP) */
 .cover-content {
     position: relative;
     z-index: 2;
@@ -50,7 +50,7 @@ body, html {
     align-items: center;
 }
 
-/* Teks The Wedding Of di paling atas (Muncul Pertama - 0.3 detik) */
+/* Teks The Wedding Of */
 .cover-subtitle {
     font-size: 10px;
     letter-spacing: 3.5px;
@@ -92,7 +92,7 @@ body, html {
     width: 100%;
 }
 
-/* Kontainer Nama Mempelai yang Dipisah */
+/* Kontainer Nama Mempelai */
 .cover-names-container {
     display: flex;
     flex-direction: column;
@@ -122,7 +122,7 @@ body, html {
     margin-bottom: 5px;
 }
 
-/* Bagian Kepada Tamu (Muncul Ketiga - 0.9 detik) */
+/* Bagian Kepada Tamu */
 .guest-section {
     width: 100%;
     margin-top: 5px;
@@ -137,7 +137,6 @@ body, html {
     margin-bottom: 4px;
 }
 
-/* Nama Tamu Versi Teks Besar Tanpa Box */
 #namaTamu {
     font-size: 1.3rem;
     font-family: 'Playfair Display', serif;
@@ -148,7 +147,7 @@ body, html {
     text-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 
-/* Kutipan / Ayat (Muncul Keempat - 1.2 detik) */
+/* Kutipan / Ayat */
 .cover-quote {
     font-size: 10px;
     color: #e2d3c1;
@@ -160,7 +159,7 @@ body, html {
     animation: fadeSlideUp 1.4s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
 }
 
-/* Tombol Buka Undangan (Muncul Terakhir - 1.5 detik) */
+/* Tombol Buka Undangan */
 .btn-buka-undangan {
     background: #fff0cf;
     color: #410200;
@@ -179,6 +178,7 @@ body, html {
     margin-top: 10px;
     opacity: 0;
     animation: fadeSlideUp 1.4s cubic-bezier(0.16, 1, 0.3, 1) 1.5s forwards;
+    cursor: pointer;
 }
 
 .btn-buka-undangan:hover {
@@ -191,9 +191,9 @@ body, html {
     height: 10px;
 }
 
-/* =========================
-   DEFINISI ANIMASI PERLAHAN (FADE & SLIDE UP)
-========================= */
+/* ==========================================================================
+   DEFINISI ANIMASI
+   ========================================================================== */
 @keyframes fadeSlideUp {
     0% {
         opacity: 0;
@@ -204,5 +204,124 @@ body, html {
         opacity: 1;
         transform: translateY(0);
         filter: blur(0);
+    }
+}
+
+
+/* ==========================================================================
+   1. KHUSUS TABLET / IPAD / SURFACE PRO (Sangat Besar & Megah)
+   ========================================================================== */
+@media screen and (min-width: 481px) and (max-width: 1024px) {
+    .cover-content {
+        max-width: 850px !important;
+        padding: 60px 45px !important;
+    }
+
+    .cover-subtitle {
+        font-size: 20px !important;
+        letter-spacing: 7px !important;
+        margin-top: 40px !important;
+    }
+
+    .cover-subtitle::before,
+    .cover-subtitle::after {
+        width: 60px !important;
+    }
+
+    .name-groom, .name-bride {
+        font-size: 8.5rem !important;      /* Tetap besar di iPad */
+    }
+
+    .name-divider {
+        font-size: 4rem !important;
+        margin: 8px 0 !important;
+    }
+
+    .cover-names-container {
+        margin-bottom: 30px !important;
+    }
+
+    .guest-label {
+        font-size: 18px !important;
+        letter-spacing: 3.5px !important;
+        margin-bottom: 8px !important;
+    }
+
+    #namaTamu {
+        font-size: 3.4rem !important;
+    }
+
+    .cover-quote {
+        font-size: 20px !important;
+        max-width: 700px !important;
+        line-height: 1.6 !important;
+        margin-top: 15px !important;
+    }
+
+    .btn-buka-undangan {
+        font-size: 22px !important;
+        padding: 22px 55px !important;
+        letter-spacing: 3.5px !important;
+        margin-top: 35px !important;
+        border-width: 2px !important;
+    }
+}
+
+
+/* ==========================================================================
+   2. KHUSUS LAPTOP / DESKTOP (Ukuran Sedang, Proporsional, Tidak Raksasa)
+   ========================================================================== */
+@media screen and (min-width: 1025px) {
+    .cover-content {
+        max-width: 600px !important;       /* Dibatasi agar pas di tengah layar laptop */
+        padding: 40px 30px !important;
+    }
+
+    .cover-subtitle {
+        font-size: 12px !important;
+        letter-spacing: 4px !important;
+        margin-top: 30px !important;
+    }
+
+    .cover-subtitle::before,
+    .cover-subtitle::after {
+        width: 35px !important;
+    }
+
+    .name-groom, .name-bride {
+        font-size: 4rem !important;        /* Ukuran sedang yang elegan di laptop */
+    }
+
+    .name-divider {
+        font-size: 2.2rem !important;
+        margin: 2px 0 !important;
+    }
+
+    .cover-names-container {
+        margin-bottom: 15px !important;
+    }
+
+    .guest-label {
+        font-size: 11px !important;
+        letter-spacing: 2px !important;
+        margin-bottom: 5px !important;
+    }
+
+    #namaTamu {
+        font-size: 1.6rem !important;
+    }
+
+    .cover-quote {
+        font-size: 12px !important;
+        max-width: 420px !important;
+        line-height: 1.5 !important;
+        margin-top: 10px !important;
+    }
+
+    .btn-buka-undangan {
+        font-size: 13px !important;
+        padding: 12px 32px !important;
+        letter-spacing: 2px !important;
+        margin-top: 20px !important;
     }
 }
