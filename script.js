@@ -1,6 +1,16 @@
-/* =========================
-   1. SMOOTH SCROLL ANIMATION (UP & DOWN)
-========================= */
+/* ==========================================================================
+   PENJAGA AKSES HALAMAN (WAJIB LEWAT OPENING.HTML)
+   ========================================================================== */
+(function() {
+    if (localStorage.getItem('playMusic') !== 'true') {
+        window.location.replace('opening.html');
+    }
+})();
+
+
+/* ==========================================================================
+   1. SMOOTH SCROLL ANIMATION (REVEAL UP & DOWN)
+   ========================================================================== */
 document.addEventListener("DOMContentLoaded", function () {
     const observerOptions = {
         root: null,
@@ -23,16 +33,61 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-/* =========================
-   2. RSVP & KOMENTAR SYSTEM
-========================= */
+/* ==========================================================================
+   2. RSVP & KOMENTAR SYSTEM (REAL-TIME DENGAN FIREBASE)
+   ========================================================================== */
+// Import Firebase SDK (Versi 10+)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+// KONFIGURASI FIREBASE KAKAK (Silakan ganti sesuai dengan project Firebase Kakak)
+const firebaseConfig = {
+    apiKey: "AIzaSyALM_MZ_5_1F4nBG-DnzidVD00tVG4XTMs",
+    authDomain: "udangan.firebaseapp.com",
+    databaseURL: "https://udangan-default-rtdb.firebaseio.com",
+    projectId: "udangan",
+    storageBucket: "udangan.appspot.com",
+    messagingSenderId: "301550781542",
+    appId: "1:301550781542:web:f7f9263a7746d69e3f99a7",
+    measurementId: "G-VCMNRMYMSL"
+};
+
+// Inisialisasi Firebase
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const commentsRef = ref(db, 'ucapan_tamu');
+
 const form = document.getElementById("rsvpForm");
 const messageList = document.getElementById("messageList");
 
-let comments = JSON.parse(localStorage.getItem("comments")) || [];
-
+// Kosongkan list statis awal agar terisi penuh secara real-time dari database
 if (messageList) {
-    renderComments();
+    messageList.innerHTML = "";
+    
+    // Ambil data secara real-time saat ada komentar baru masuk
+    onChildAdded(commentsRef, (snapshot) => {
+        const item = snapshot.val();
+        
+        // Hapus teks "Belum ada ucapan" jika sudah ada data masuk
+        const emptyText = messageList.querySelector("p");
+        if (emptyText) emptyText.remove();
+
+        const statusClass = item.kehadiran === "Hadir" ? "status-hadir" : "status-tidak";
+
+        const commentHTML = `
+        <div class="comment">
+            <div class="comment-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <div class="comment-name" style="margin-bottom: 0;">${escapeHtml(item.nama)}</div>
+                <div class="comment-status ${statusClass}">${escapeHtml(item.kehadiran)}</div>
+            </div>
+            <div class="comment-message">${escapeHtml(item.pesan)}</div>
+            <div class="comment-time">${item.waktu}</div>
+        </div>
+        `;
+        
+        // Masukkan komentar baru di paling atas daftar
+        messageList.insertAdjacentHTML('afterbegin', commentHTML);
+    });
 }
 
 if (form) {
@@ -48,71 +103,64 @@ if (form) {
             return;
         }
 
+        // Format waktu lokal Indonesia
+        const now = new Date();
+        const timestamp = now.toLocaleDateString("id-ID") + ', ' + now.toLocaleTimeString("id-ID", { hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(/\./g, ':');
+
         const data = {
             nama: nama,
             kehadiran: kehadiran,
             pesan: pesan,
-            waktu: new Date().toLocaleString("id-ID")
+            waktu: timestamp
         };
 
-        comments.unshift(data);
-        localStorage.setItem("comments", JSON.stringify(comments));
+        // Kirim data ke Firebase Database (Otomatis menyebar real-time ke semua perangkat)
+        push(commentsRef, data).then(() => {
+            form.reset();
 
-        renderComments();
-        form.reset();
-
-        // Auto scroll halus ke section ucapan setelah submit
-        const ucapanSection = document.getElementById("ucapan");
-        if (ucapanSection) {
-            ucapanSection.scrollIntoView({ behavior: "smooth" });
-        }
+            // Auto scroll halus ke section ucapan setelah submit
+            const ucapanSection = document.getElementById("ucapan");
+            if (ucapanSection) {
+                ucapanSection.scrollIntoView({ behavior: "smooth" });
+            }
+        }).catch((error) => {
+            console.error("Gagal mengirim ucapan:", error);
+            alert("Gagal mengirim ucapan. Periksa koneksi atau konfigurasi database.");
+        });
     });
 }
 
-function renderComments(){
-    if (!messageList) return;
-
-    messageList.innerHTML = "";
-
-    if (comments.length === 0) {
-        messageList.innerHTML = `<p style="text-align:center; color:#888; padding:15px;">Belum ada ucapan.</p>`;
-        return;
-    }
-
-    comments.forEach(item => {
-        const statusClass = item.kehadiran === "Hadir" ? "status-hadir" : "status-tidak";
-
-        messageList.innerHTML += `
-        <div class="comment">
-            <div class="comment-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <div class="comment-name" style="margin-bottom: 0;">${item.nama}</div>
-                <div class="comment-status ${statusClass}">${item.kehadiran}</div>
-            </div>
-            <div class="comment-message">${item.pesan}</div>
-            <div class="comment-time">${item.waktu}</div>
-        </div>
-        `;
-    });
+// Fungsi keamanan untuk mencegah celah injeksi HTML/XSS dari input teks
+function escapeHtml(text) {
+    if (!text) return "";
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return text.toString().replace(/[&<>"']/g, function(m) { return map[m]; });
 }
 
 
-/* =========================
+/* ==========================================================================
    3. FUNGSI SALIN TEKS (REKENING / E-WALLET)
-========================= */
-function copyText(text) {
+   ========================================================================== */
+window.copyText = function(text) {
     navigator.clipboard.writeText(text).then(() => {
         alert("Berhasil disalin: " + text);
     }).catch(err => {
         console.error("Gagal menyalin text: ", err);
     });
-}
+};
 
 
-/* =========================
+/* ==========================================================================
    4. AUTO DETECT DEVICE CALENDAR (TARGET: 6 DESEMBER 2026)
-========================= */
-function addToCalendar() {
-    const eventTitle = "Pernikahan Mempelai";
+   ========================================================================== */
+window.addToCalendar = function() {
+    const eventTitle = "Pernikahan Randy & Intan";
     const eventDetails = "Acara Pernikahan kami. Mohon doa restunya.";
     const eventLocation = "Jl. Arteri Ringroad, Asam Kumbang, Medan Selayang";
     
@@ -146,12 +194,12 @@ function addToCalendar() {
         const googleUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&dates=${startTime}/${endTime}&details=${encodeURIComponent(eventDetails)}&location=${encodeURIComponent(eventLocation)}`;
         window.open(googleUrl, '_blank');
     }
-}
+};
 
 
-/* =========================
-   5. GALERI AUTO SCROLL
-========================= */
+/* ==========================================================================
+   5. GALERI AUTO SCROLL & TOGGLE GRID
+   ========================================================================== */
 const track = document.getElementById("galeriTrack");
 if (track) {
     let scrollAmount = 0;
@@ -174,24 +222,44 @@ if (track) {
     });
 }
 
+window.toggleGaleriGrid = function() {
+    const grid = document.getElementById('galeriGrid');
+    const btn = document.getElementById('toggleGaleriBtn');
+    const toggleText = document.getElementById('toggleText');
+    
+    if (!grid) return;
 
-/* =========================
+    grid.classList.toggle('show-all');
+    if(btn) btn.classList.toggle('active');
+    
+    if (toggleText) {
+        if (grid.classList.contains('show-all')) {
+            toggleText.textContent = "Tutup Sembunyikan";
+        } else {
+            toggleText.textContent = "Lihat Foto Lainnya";
+        }
+    }
+};
+
+
+/* ==========================================================================
    6. SLIDESHOW IPOD
-========================= */
+   ========================================================================== */
 let currentSlideIndex = 0;
 const slides = document.querySelectorAll('.ipod-slide');
 let slideInterval;
 
 function showSlide(index) {
+    if (slides.length === 0) return;
     slides.forEach(slide => slide.classList.remove('active'));
     currentSlideIndex = (index + slides.length) % slides.length;
     slides[currentSlideIndex].classList.add('active');
 }
 
-function changeSlide(direction) {
+window.changeSlide = function(direction) {
     showSlide(currentSlideIndex + direction);
     resetInterval();
-}
+};
 
 function startSlideshow() {
     slideInterval = setInterval(() => {
@@ -205,82 +273,52 @@ function resetInterval() {
 }
 
 
-/* =========================
-   7. KONTROL MUSIK & AUTOPLAY
-========================= */
-function toggleMusic() {
+/* ==========================================================================
+   7. KONTROL MUSIK EKSKLUSIF (LANJUTAN DARI OPENING)
+   ========================================================================== */
+document.addEventListener("DOMContentLoaded", function () {
     const music = document.getElementById('bgMusic');
     const vinyl = document.getElementById('vinylRecord');
     const playPauseIcon = document.getElementById('playPauseIcon');
 
-    if (music.paused) {
+    if (music && localStorage.getItem('playMusic') === 'true') {
         music.play().then(() => {
-            vinyl.classList.add('playing');
-            playPauseIcon.innerHTML = '&#10074;&#10074;';
+            if (vinyl) vinyl.classList.add('playing');
+            if (playPauseIcon) playPauseIcon.innerHTML = '&#10074;&#10074;';
         }).catch(err => {
-            console.log("Gagal memutar musik:", err);
+            console.log("Audio play error:", err);
         });
-    } else {
-        music.pause();
-        vinyl.classList.remove('playing');
-        playPauseIcon.innerHTML = '&#9658;';
     }
-}
+});
 
-function initAutoplay() {
+window.toggleMusic = function() {
     const music = document.getElementById('bgMusic');
     const vinyl = document.getElementById('vinylRecord');
     const playPauseIcon = document.getElementById('playPauseIcon');
 
     if (!music) return;
 
-    music.loop = true;
-    let playPromise = music.play();
-
-    if (playPromise !== undefined) {
-        playPromise.then(() => {
-            vinyl.classList.add('playing');
-            playPauseIcon.innerHTML = '&#10074;&#10074;';
-        }).catch(error => {
-            const triggerPlay = () => {
-                music.play().then(() => {
-                    vinyl.classList.add('playing');
-                    playPauseIcon.innerHTML = '&#10074;&#10074;';
-                    document.removeEventListener('click', triggerPlay);
-                    document.removeEventListener('touchstart', triggerPlay);
-                    document.removeEventListener('scroll', triggerPlay);
-                }).catch(e => console.log("Menunggu interaksi pengguna..."));
-            };
-
-            document.addEventListener('click', triggerPlay);
-            document.addEventListener('touchstart', triggerPlay);
-            document.addEventListener('scroll', triggerPlay);
+    if (music.paused) {
+        music.play().then(() => {
+            if (vinyl) vinyl.classList.add('playing');
+            if (playPauseIcon) playPauseIcon.innerHTML = '&#10074;&#10074;';
+            localStorage.setItem('playMusic', 'true');
+        }).catch(err => {
+            console.log("Gagal memutar musik:", err);
         });
-    }
-}
-
-function toggleGaleriGrid() {
-    const grid = document.getElementById('galeriGrid');
-    const toggleText = document.getElementById('toggleText');
-    const toggleBtn = document.getElementById('toggleGaleriBtn');
-
-    if (!grid) return;
-
-    grid.classList.toggle('hidden-grid');
-    toggleBtn.classList.toggle('active');
-
-    if (grid.classList.contains('hidden-grid')) {
-        toggleText.textContent = "Lihat Foto Lainnya";
     } else {
-        toggleText.textContent = "Tutup Foto";
+        music.pause();
+        if (vinyl) vinyl.classList.remove('playing');
+        if (playPauseIcon) playPauseIcon.innerHTML = '&#9658;';
+        localStorage.setItem('playMusic', 'false');
     }
-}
+};
 
 
-/* =========================
+/* ==========================================================================
    8. TOGGLE DROPDOWN (E-WALLET & KADO)
-========================= */
-function toggleDropdown(contentId, headerElement) {
+   ========================================================================== */
+window.toggleDropdown = function(contentId, headerElement) {
     const content = document.getElementById(contentId);
     if (!content) return;
 
@@ -292,12 +330,12 @@ function toggleDropdown(contentId, headerElement) {
     } else {
         content.style.maxHeight = content.scrollHeight + "px";
     }
-}
+};
 
 
-/* =========================
+/* ==========================================================================
    9. COUNTDOWN TIMER (MENUJU 6 DESEMBER 2026)
-========================= */
+   ========================================================================== */
 document.addEventListener("DOMContentLoaded", function () {
     const targetDate = new Date("December 6, 2026 00:00:00").getTime();
 
@@ -334,21 +372,4 @@ document.addEventListener("DOMContentLoaded", function () {
     if (slides.length > 0) {
         startSlideshow();
     }
-    initAutoplay(); 
 });
-
-function toggleGaleriGrid() {
-    const grid = document.getElementById('galeriGrid');
-    const btn = document.getElementById('toggleGaleriBtn');
-    const toggleText = document.getElementById('toggleText');
-    
-    // Membuka atau menutup sisa foto
-    grid.classList.toggle('show-all');
-    btn.classList.toggle('active');
-    
-    if (grid.classList.contains('show-all')) {
-        toggleText.textContent = "Tutup Sembunyikan";
-    } else {
-        toggleText.textContent = "Lihat Foto Lainnya";
-    }
-}
