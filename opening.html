@@ -64,23 +64,13 @@
         }
 
         // 2. Fungsi saat tombol BUKA UNDANGAN diklik
-        function bukaUndangan() {
-            const music = document.getElementById('bgMusic');
-            
-            // Berikan stempel izin bahwa tamu sudah mengeklik tombol buka undangan
-            localStorage.setItem('izinAksesUndangan', 'terbuka');
-            localStorage.setItem('playMusic', 'true'); // Untuk menyalakan musik di halaman utama
-
-            // Putar musik lalu masuk ke index.html dengan sedikit jeda agar audio sempat ter-trigger
-            music.play().then(() => {
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 300);
-            }).catch(err => {
-                console.log("Audio diblokir browser, tetap masuk ke index:", err);
-                window.location.href = 'index.html';
-            });
-        }
+       function bukaUndangan() {
+    // Simpan stempel bahwa undangan sudah dibuka dan musik diizinkan
+    localStorage.setItem('playMusic', 'true');
+    
+    // Langsung masuk ke index.html tanpa jeda audio di opening
+    window.location.href = 'index.html';
+}
     </script>
 </body>
 </html>
