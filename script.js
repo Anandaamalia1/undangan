@@ -1,11 +1,11 @@
 /* ==========================================================================
-   PENJAGA AKSES HALAMAN (WAJIB LEWAT OPENING.HTML)
+   PENJAGA AKSES HALAMAN (OPSIONAL / BISA DI-COMMENT DULU SAAT EDIT LOKAL)
    ========================================================================== */
-(function() {
-    if (localStorage.getItem('playMusic') !== 'true') {
-        window.location.replace('opening.html');
-    }
-})();
+// (function() {
+//     if (localStorage.getItem('playMusic') !== 'true') {
+//         window.location.replace('opening.html');
+//     }
+// })();
 
 
 /* ==========================================================================
@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const observerOptions = {
         root: null,
         rootMargin: "0px",
-        threshold: 0.15 // Memicu animasi saat elemen 15% terlihat di layar
+        threshold: 0.15
     };
 
     const observer = new IntersectionObserver((entries, observer) => {
@@ -34,28 +34,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 /* ==========================================================================
-   2. RSVP & KOMENTAR SYSTEM (REAL-TIME DENGAN FIREBASE)
+   2. RSVP & KOMENTAR SYSTEM (REAL-TIME FIREBASE - GLOBAL CDN)
    ========================================================================== */
-// Import Firebase SDK (Versi 10+)
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
-// KONFIGURASI FIREBASE KAKAK
+// Konfigurasi Firebase Kakak
 const firebaseConfig = {
     apiKey: "AIzaSyALM_MZ_5_1F4nBG-DnzidVD00tVG4XTMs",
     authDomain: "udangan.firebaseapp.com",
     databaseURL: "https://udangan-default-rtdb.firebaseio.com",
     projectId: "udangan",
-    storageBucket: "udangan.appspot.com",
+    storageBucket: "udangan.firebasestorage.app",
     messagingSenderId: "301550781542",
     appId: "1:301550781542:web:f7f9263a7746d69e3f99a7",
     measurementId: "G-VCMNRMYMSL"
 };
 
-// Inisialisasi Firebase
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const commentsRef = ref(db, 'ucapan_tamu');
+// Inisialisasi Firebase (Menggunakan objek global dari CDN)
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const commentsRef = db.ref('ucapan_tamu');
 
 const form = document.getElementById("rsvpForm");
 const messageList = document.getElementById("messageList");
@@ -63,11 +59,10 @@ const messageList = document.getElementById("messageList");
 if (messageList) {
     messageList.innerHTML = "";
     
-    // Ambil data secara real-time saat ada komentar baru masuk
-    onChildAdded(commentsRef, (snapshot) => {
+    // Ambil data secara real-time
+    commentsRef.on('child_added', (snapshot) => {
         const item = snapshot.val();
         
-        // Hapus teks placeholder jika masih ada
         const emptyText = messageList.querySelector("p");
         if (emptyText) emptyText.remove();
 
@@ -84,7 +79,6 @@ if (messageList) {
         </div>
         `;
         
-        // Masukkan komentar baru di paling atas daftar
         messageList.insertAdjacentHTML('afterbegin', commentHTML);
     });
 }
@@ -112,11 +106,8 @@ if (form) {
             waktu: timestamp
         };
 
-        // Kirim data ke Firebase Database secara real-time
-        push(commentsRef, data).then(() => {
+        commentsRef.push(data).then(() => {
             form.reset();
-
-            // Auto scroll halus ke section ucapan setelah submit
             const ucapanSection = document.getElementById("ucapan");
             if (ucapanSection) {
                 ucapanSection.scrollIntoView({ behavior: "smooth" });
@@ -128,7 +119,6 @@ if (form) {
     });
 }
 
-// Fungsi keamanan untuk mencegah celah injeksi HTML/XSS
 function escapeHtml(text) {
     if (!text) return "";
     const map = {
@@ -145,31 +135,30 @@ function escapeHtml(text) {
 /* ==========================================================================
    3. FUNGSI SALIN TEKS (REKENING / E-WALLET)
    ========================================================================== */
-window.copyText = function(text) {
+function copyText(text) {
     navigator.clipboard.writeText(text).then(() => {
         alert("Berhasil disalin: " + text);
     }).catch(err => {
         console.error("Gagal menyalin text: ", err);
     });
-};
+}
 
 
 /* ==========================================================================
    4. AUTO DETECT DEVICE CALENDAR (TARGET: 6 DESEMBER 2026)
    ========================================================================== */
-window.addToCalendar = function() {
+function addToCalendar() {
     const eventTitle = "Pernikahan Randy & Intan";
     const eventDetails = "Acara Pernikahan kami. Mohon doa restunya.";
     const eventLocation = "Jl. Arteri Ringroad, Asam Kumbang, Medan Selayang";
     
-    // Target 6 Desember 2026
     const startTime = "20261206T080000Z";
     const endTime = "20261206T210000Z";
 
     const isIOS = /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent) && !window.MSStream;
 
     if (isIOS) {
-        const iconContent = 
+        const icsContent = 
             "BEGIN:VCALENDAR\n" +
             "VERSION:2.0\n" +
             "BEGIN:VEVENT\n" +
@@ -181,7 +170,7 @@ window.addToCalendar = function() {
             "END:VEVENT\n" +
             "END:VCALENDAR";
 
-        const blob = new Blob([iconContent], { type: 'text/calendar;charset=utf-8' });
+        const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
         link.setAttribute('download', 'pernikahan.ics');
@@ -192,7 +181,7 @@ window.addToCalendar = function() {
         const googleUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&dates=${startTime}/${endTime}&details=${encodeURIComponent(eventDetails)}&location=${encodeURIComponent(eventLocation)}`;
         window.open(googleUrl, '_blank');
     }
-};
+}
 
 
 /* ==========================================================================
@@ -220,7 +209,7 @@ if (track) {
     });
 }
 
-window.toggleGaleriGrid = function() {
+function toggleGaleriGrid() {
     const grid = document.getElementById('galeriGrid');
     const btn = document.getElementById('toggleGaleriBtn');
     const toggleText = document.getElementById('toggleText');
@@ -237,7 +226,7 @@ window.toggleGaleriGrid = function() {
             toggleText.textContent = "Lihat Foto Lainnya";
         }
     }
-};
+}
 
 
 /* ==========================================================================
@@ -254,10 +243,10 @@ function showSlide(index) {
     slides[currentSlideIndex].classList.add('active');
 }
 
-window.changeSlide = function(direction) {
+function changeSlide(direction) {
     showSlide(currentSlideIndex + direction);
     resetInterval();
-};
+}
 
 function startSlideshow() {
     slideInterval = setInterval(() => {
@@ -289,7 +278,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-window.toggleMusic = function() {
+function toggleMusic() {
     const music = document.getElementById('bgMusic');
     const vinyl = document.getElementById('vinylRecord');
     const playPauseIcon = document.getElementById('playPauseIcon');
@@ -310,13 +299,13 @@ window.toggleMusic = function() {
         if (playPauseIcon) playPauseIcon.innerHTML = '&#9658;';
         localStorage.setItem('playMusic', 'false');
     }
-};
+}
 
 
 /* ==========================================================================
    8. TOGGLE DROPDOWN (E-WALLET & KADO)
    ========================================================================== */
-window.toggleDropdown = function(contentId, headerElement) {
+function toggleDropdown(contentId, headerElement) {
     const content = document.getElementById(contentId);
     if (!content) return;
 
@@ -328,7 +317,7 @@ window.toggleDropdown = function(contentId, headerElement) {
     } else {
         content.style.maxHeight = content.scrollHeight + "px";
     }
-};
+}
 
 
 /* ==========================================================================
