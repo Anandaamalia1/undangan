@@ -268,12 +268,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const vinyl = document.getElementById('vinylRecord');
     const playPauseIcon = document.getElementById('playPauseIcon');
 
+    // Pastikan mengambil izin dari localStorage
     if (music && localStorage.getItem('playMusic') === 'true') {
         music.play().then(() => {
             if (vinyl) vinyl.classList.add('playing');
             if (playPauseIcon) playPauseIcon.innerHTML = '&#10074;&#10074;';
         }).catch(err => {
-            console.log("Audio play error:", err);
+            console.log("Audio dicegah oleh browser HP:", err);
         });
     }
 });
